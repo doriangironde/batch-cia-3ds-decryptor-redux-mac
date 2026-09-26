@@ -1,0 +1,32 @@
+# --- Your own game content: never commit this ---
+*.cia
+*.3ds
+*.cci
+*.ncch
+*.app
+*.app.*
+log/
+programlog.txt
+
+# --- Third-party binaries: installed by ./setup-macos.sh, not redistributed here ---
+bin/ctrtool
+bin/makerom
+bin/seeddb.bin
+bin/*.exe
+bin/decrypt.exe
+
+# --- The upstream Windows release: not part of this port ---
+*.bat
+
+# --- Python ---
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.mypy_cache/
+.pytest_cache/
+
+# --- macOS ---
+.DS_Store
+._*
+*.swp
