@@ -95,10 +95,21 @@ Measured on an M-series Mac:
 
 `decrypt.exe` is a PyInstaller-packed Python 2.7 script. This port is a
 line-by-line port of the recovered source, and doing so surfaced three real
-defects. The upshot: **the original never derived a correct title key**, so
-every file it touched decrypted to garbage — which `makerom` still cheerfully
-repackaged into a structurally valid CIA. That is why its log cheerfully
-reported "Decrypting succeeded" on files it had not actually decrypted.
+defects. The headline one: **it never derives a correct title key**, so it
+cannot decrypt any normally-encrypted CIA.
+
+The failure is loud, not silent. On a CIA whose content is encrypted — that is,
+nearly all of them — the title key is wrong, the decrypted content does not
+start with the `NCCH` magic, and `decrypt.py` skips every content and writes no
+files at all. `makerom` is then invoked with no input and aborts with
+`Argument "-rsf" is required`, so the batch file reports **"Decrypting failed"**
+in `log/programlog.txt`.
+
+There is one case where the original *does* work: a CIA whose content is stored
+**unencrypted** in the first place. There the title key is never touched,
+`decrypt.py` copies the plaintext through, and the result is correct. That is
+presumably why the bug went unnoticed for so long — it only bites on the
+encrypted titles people actually care about.
 
 1. **Wrong common key.** `decrypt.py` used
    `to_bytes([8, 9, 10, 11, 12, 13][keyId], 16)` as the ES common key. Those
